@@ -36,6 +36,12 @@ def _anomaly(config: ModelConfig) -> np.ndarray:
     crisa = _sigmoid(t, config.k_c, config.t_c)
     p = sora * crisa
 
+    # normalizar solo pre t_star
+    p_pre = p[:config.t_star]
+    p_pre = config.p_max * p_pre / p_pre.max()
+    p[:config.t_star] = p_pre
+
+    # decaimiento post t_star
     mask = t >= config.t_star
     p_star = p[config.t_star - 1] # valor justo antes de t_star
     decay = config.p_residual + (p_star - config.p_residual) * np.exp(-config.lambda_decay * (t[mask] - config.t_star))
