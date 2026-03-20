@@ -46,11 +46,13 @@ def run_simulation(config: ModelConfig) -> SimulationResult:
         noise_S = rng.normal(1, config.sigma_obs, size=config.n_periods)
         noise_N = rng.normal(1, config.sigma_obs, size=config.n_periods)
         S_obs = np.clip(S_base * noise_S, 1, 100)
-        N_obs = np.clip(N_base * noise_N, 1, None)
-
+       
+        is_crisa = (i == 0)
+        N_obs = generate_decisions(S_obs, config, anomaly=is_crisa)
+        N_obs = np.clip(N_obs, 1, None).astype(int)
+    
         S_all[:, i] = S_obs
         N_all[:, i] = N_obs
-        Y_all[:, i] = generate_losses(N_obs, S_obs, config, anomaly=(i == 0), rng=rng)
+        Y_all[:, i] = generate_losses(N_obs, S_obs, config, anomaly=is_crisa, rng=rng)
 
-    
     return SimulationResult(S=S_all, N=N_all, Y=Y_all, mission_ids=mission_ids)
