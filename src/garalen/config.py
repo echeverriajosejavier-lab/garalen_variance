@@ -17,18 +17,20 @@ class ModelConfig:
     N_0: float = 500.0     # umbral de saturación
 
     # Parámetros de la simulación
-    n_periods: int = 360  # ~12 años de operaciones
-    t_star: int = 330        # evento en que Oblata extrae a Sora (~ año 11)
+    n_S: float = 420 # años con Sora
+    past: float = 420
+    n_periods: int = n_S + past  # ~25 años de operaciones
+    t_star: int = int (past + n_S - 30)        # evento en que Oblata extrae a Sora (~ 11 años)
     seed: int = 42          # semilla para reproducibilidad
 
     # Parámetros de la anomalía 
     k_s: float = 0.02        # abruptez de la maduración de Sora
-    t_s: float = 200.0       # centro de maduración Sora (~año 9)
+    t_s: float = past + 200.0       # centro de maduración Sora (~año 9)
     k_c: float = 0.015        # abruptez de la receptividad de Crisa
-    t_c: float = 210.0       # centro receptividad Crisa (~año 9.5)
+    t_c: float = past + 210.0       # centro receptividad Crisa (~año 9.5)
     lambda_decay: float = 0.3 # velocidad de decaimiento post t_star
     p_residual: float = 0.01 # influencia residual tras la desaparición
-    p_max: float = 0.7 # influencia máxima de Sora en el pico
+    p_max: float = 0.85 # influencia máxima de Sora en el pico
 
     # Parámetros de la influencia de la anomalía según severidad
     sigma_g: float = 30.0   

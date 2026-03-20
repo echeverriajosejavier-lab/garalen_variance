@@ -32,8 +32,11 @@ def _anomaly(config: ModelConfig) -> np.ndarray:
     """
 
     t = np.arange(config.n_periods)
-    sora = _sigmoid(t, config.k_s, config.t_s)
-    crisa = _sigmoid(t, config.k_c, config.t_c)
+    edad_sora = t - config.past
+    sora = _sigmoid(edad_sora, config.k_s, config.t_s)
+    sora[t < config.past] = 0
+    crisa = _sigmoid(edad_sora, config.k_c, config.t_c)
+    crisa[t < config.past] = 0
     p = sora * crisa
 
     # normalizar solo pre t_star
