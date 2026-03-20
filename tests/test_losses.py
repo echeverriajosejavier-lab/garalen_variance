@@ -9,8 +9,8 @@ def test_non_negativity():
     rng = np.random.default_rng(config.seed)
     S = generate_severity(config)
     N = generate_decisions(S, config)
-    Y_T = generate_losses(N, config, anomaly=True, rng=rng)
-    Y_F = generate_losses(N, config, anomaly=False, rng=rng)
+    Y_T = generate_losses(N, S, config, anomaly=True, rng=rng)
+    Y_F = generate_losses(N, S, config, anomaly=False, rng=rng)
     assert np.all(Y_T >= 0) and np.all(Y_F >= 0)
 
 def test_mistakes_lesser_decisions():
@@ -18,8 +18,8 @@ def test_mistakes_lesser_decisions():
     rng = np.random.default_rng(config.seed)
     S = generate_severity(config)
     N = generate_decisions(S, config)
-    Y_T = generate_losses(N, config, anomaly=True, rng=rng)
-    Y_F = generate_losses(N, config, anomaly=False, rng=rng)
+    Y_T = generate_losses(N, S, config, anomaly=True, rng=rng)
+    Y_F = generate_losses(N, S, config, anomaly=False, rng=rng)
     assert np.all(Y_T <= N) and np.all(Y_F <= N)
 
 def test_output_length():
@@ -27,8 +27,8 @@ def test_output_length():
     rng = np.random.default_rng(config.seed)
     S = generate_severity(config)
     N = generate_decisions(S, config)
-    Y_T = generate_losses(N, config, anomaly=True, rng=rng)
-    Y_F = generate_losses(N, config, anomaly=False, rng=rng)
+    Y_T = generate_losses(N, S, config, anomaly=True, rng=rng)
+    Y_F = generate_losses(N, S, config, anomaly=False, rng=rng)
     assert len(Y_T) == config.n_periods and len(Y_F) == config.n_periods
 
 def test_reduction_losses():
@@ -36,6 +36,6 @@ def test_reduction_losses():
     rng = np.random.default_rng(config.seed)
     S = generate_severity(config)
     N = generate_decisions(S, config)
-    Y_T = generate_losses(N, config, anomaly=True, rng=rng)
-    Y_F = generate_losses(N, config, anomaly=False, rng=rng)
+    Y_T = generate_losses(N, S, config, anomaly=True, rng=rng)
+    Y_F = generate_losses(N, S, config, anomaly=False, rng=rng)
     assert np.mean(Y_T) < np.mean(Y_F)

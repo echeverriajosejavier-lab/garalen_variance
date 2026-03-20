@@ -49,7 +49,7 @@ def _anomaly(config: ModelConfig) -> np.ndarray:
 
     return p
 
-def generate_losses(N: np.ndarray, config: ModelConfig, anomaly: bool, rng: np.random.Generator) -> np.ndarray:
+def generate_losses(N: np.ndarray, S: np.ndarray, config: ModelConfig, anomaly: bool, rng: np.random.Generator) -> np.ndarray:
     """
     Genera la serie temporal de pérdidas Y_t.
 
@@ -60,7 +60,8 @@ def generate_losses(N: np.ndarray, config: ModelConfig, anomaly: bool, rng: np.r
 
     if anomaly:
         p = _anomaly(config)
-        q_eff = q * (1 - p)
+        g = np.exp(-0.5 * ((S - config.S_0) / config.sigma_g)**2)
+        q_eff = q * (1 - p*g)
     else:
         q_eff = q
     

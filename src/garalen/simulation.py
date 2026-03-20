@@ -24,7 +24,7 @@ def run_simulation(config: ModelConfig) -> SimulationResult:
     
     S = generate_severity(config)
     N = generate_decisions(S, config)
-    Y_anomaly = generate_losses(N, config, anomaly=True, rng=rng)
-    Y_baseline = generate_losses(N, config, anomaly=False, rng=rng)
+    Y_anomaly = generate_losses(N, S, config, anomaly=True, rng=rng)
+    Y_baseline = generate_losses(N, S, config, anomaly=False, rng=rng)
     
     return SimulationResult(S=S, N=N, Y_anomaly=Y_anomaly, Y_baseline=Y_baseline)

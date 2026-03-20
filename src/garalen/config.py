@@ -28,4 +28,8 @@ class ModelConfig:
     t_c: float = 210.0       # centro receptividad Crisa (~año 9.5)
     lambda_decay: float = 0.3 # velocidad de decaimiento post t_star
     p_residual: float = 0.01 # influencia residual tras la desaparición
-    p_max: float = 0.10 # influencia máxima de Sora en el pico
+    p_max: float = 0.7 # influencia máxima de Sora en el pico
+
+    # Parámetros de la influencia de la anomalía según severidad
+    sigma_g: float = 30.0   
+    S_0 : float = 40.0
