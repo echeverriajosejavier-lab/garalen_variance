@@ -35,3 +35,8 @@ class ModelConfig:
     # Parámetros de la influencia de la anomalía según severidad
     sigma_g: float = 30.0   
     S_0 : float = 40.0
+
+    # Parámetros para varias misiones
+
+    sigma_obs: float = 0.01     # ruido de observación por misión
+    n_missions: float = 30      # número de misiones sin anomalía
