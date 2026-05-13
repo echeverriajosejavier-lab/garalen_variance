@@ -21,5 +21,5 @@ def generate_severity(config: ModelConfig) -> np.ndarray:
     for t in range(1,total):
         S[t] = (config.phi *S[t-1] + config.A * np.sin(2 * np.pi * t / config.T) + epsilon[t])
     
-    S = np.exp(S)
+    S = 1 + 99 * (1 / (1 + np.exp(-S)))
     return S[burn_in:]              # descartamos el burn-in
