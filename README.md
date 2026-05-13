@@ -39,7 +39,8 @@ garalen_variance/
 ├── data/
 │   └── simulation.csv
 ├── notebooks/
-│   └── examination.ipynb         # model internals and anomaly analysis
+│   ├── examination.ipynb         # model internals and anomaly analysis
+│   └── analysis.ipynb            # statistical analysis from the observer's perspective
 ├── tests/                        # pytest suite (13 passing)
 ├── tests_dynamic/
 ├── pyproject.toml
