@@ -1,290 +1,191 @@
-# Garalén Variance Model  
-### Narrative + Statistical + Physical Framework
+# GARALEN — Statistical & Physical Model Documentation
 
 ---
 
-# 1. Narrative Context
+## 1. Modeling Objective
 
-Garalén is a non-Republic Outer Rim world under Republic-aligned emergency coordination.
+Construct synthetic operational data for a network of humanitarian missions such that:
 
-Key characteristics:
+- Standard statistical analysis detects a weak performance anomaly in one mission
+- Aggregated cross-period analysis detects a stronger, sustained deviation
+- No explicit causal mechanism is assumed or encoded
+- Only the statistical signature of the deviation is observable
 
-- Climate instability (hurricanes, seismic activity)
-- Population corridor between coastal and highland regions
-- Dependence on Republic emergency logistics
-- Civil Coordination Authority governs response
-
-Over a multi-year period, Garalén exhibits:
-
-> A sustained statistical deviation in civil emergency outcomes.
-
-This deviation:
-
-- Is not explained by infrastructure changes
-- Is not explained by procedural reforms
-- Is not data corruption
-- Persists across multiple reporting cycles
-
-After the removal of a specific non-executive dependent:
-
-> System performance returns to baseline expectations.
+The anomaly is designed to be real but subtle: detectable through careful analysis, not visible per-event.
 
 ---
 
-# 2. Modeling Objective
+## 2. Core Variables
 
-Construct synthetic data such that:
+### 2.1 Environmental Severity — $S_t$
 
-- Republic-level analysis detects a weak anomaly
-- Imperial re-analysis detects a stronger statistical deviation
-- No explicit causal mechanism is assumed
-- Only statistical deviation is observable
+Represents the intensity of environmental events (climate, seismic) per quarter.
 
----
+Modeled as an AR(1) process with seasonal forcing:
 
-# 3. Core Variables
+$$S_t = \phi S_{t-1} + A \sin\!\left(\frac{2\pi t}{T}\right) + \epsilon_t$$
 
-## 3.1 Severity \( S_t \)
+| Parameter | Interpretation |
+|---|---|
+| $\phi$ | Temporal persistence (system memory) |
+| $A$ | Seasonal forcing amplitude |
+| $T$ | Seasonal period |
+| $\epsilon_t \sim \mathcal{N}(0, \sigma^2)$ | Stochastic environmental shocks |
 
-Represents intensity of environmental events per quarter.
-
-Modeled as:
-
-\[
-S_t = \phi S_{t-1} + A \sin\left(\frac{2\pi t}{T}\right) + \epsilon_t
-\]
-
-Where:
-
-- \( \phi \): temporal persistence (memory)
-- \( A \): seasonal forcing amplitude
-- \( T \): seasonal period
-- \( \epsilon_t \sim \mathcal{N}(0, \sigma^2) \): stochastic shocks
-
-### Physical interpretation
-
-- AR(1): dissipative system with memory
-- Sinusoidal term: external periodic forcing
-- Noise: environmental unpredictability
+**Physical interpretation:** AR(1) as a dissipative system with memory; sinusoidal term as external periodic forcing; noise as environmental unpredictability.
 
 ---
 
-## 3.2 Decision Load \( N_t \)
+### 2.2 Decision Load — $N_t$
 
-Number of critical decisions per period:
+Number of critical operational decisions per period:
 
-\[
-N_t = a + b S_t
-\]
+$$N_t = a + b\, S_t$$
 
-Interpretation:
-
-- Base decision load exists at all times
-- Higher severity → more critical decision points
-
-This represents the number of "micro-events" in the system.
+Higher environmental severity produces more critical decision points. This is the number of discrete trials in the loss model.
 
 ---
 
-# 4. Baseline System (No Anomaly)
+## 3. Baseline System
 
-Losses arise from independent failure probabilities:
+In the absence of any anomaly, losses arise from independent failure probabilities across decisions:
 
-\[
-Y_t \sim \text{Binomial}(N_t, q)
-\]
+$$Y_t \sim \text{Binomial}(N_t,\, q)$$
 
-Where:
-
-- \( q \): probability of failure per decision
-
-### Physical analogy
-
-- Many independent trials
-- Each trial has failure probability
-- System behaves like a standard statistical ensemble
+where $q$ is the per-decision failure probability. This is the null model: a standard statistical ensemble with no inter-mission variation beyond sampling noise.
 
 ---
 
-# 5. Anomalous System (Child Present)
+## 4. Anomalous System
 
-A non-classical influence slightly reduces failure probability.
-
-This influence is:
+One mission exhibits a latent reduction in its per-decision failure probability. The influence is:
 
 - Not deterministic
-- Not constant
-- Not always active
+- Not constant across periods
+- Not directly observable
 
-Modeled as:
+Modeled via a Beta-distributed efficiency parameter:
 
-\[
-p_t \sim \text{Beta}(\alpha, \beta)
-\]
+$$p_t \sim \text{Beta}(\alpha, \beta)$$
 
-Effective failure probability:
+Effective failure probability for the anomalous mission:
 
-\[
-q_{eff,t} = q (1 - p_t)
-\]
+$$q_{\text{eff},t} = q\,(1 - p_t)$$
 
-Losses:
+Losses for the anomalous mission:
 
-\[
-Y_t \sim \text{Binomial}(N_t, q_{eff,t})
-\]
+$$Y_t \sim \text{Binomial}(N_t,\, q_{\text{eff},t})$$
 
 ---
 
-# 6. Interpretation of the Anomaly
+## 5. Structure of the Anomaly
 
-The child:
+The anomaly acts at the level of individual decisions, not at the event level. Consequently:
 
-- Does not act globally
-- Does not anticipate events
-- Does not learn from history
+- More severe events → more decision points → more opportunities for the influence to manifest
+- The effect is negligible at low severity and grows with $N_t$
 
-Instead:
+Expected reduction in losses relative to baseline:
 
-> The child influences individual critical decisions when they arise.
-
-Therefore:
-
-- More severe events → more decision points
-- More decision points → more opportunities for influence
-
----
-
-# 7. Key Consequence
-
-Expected reduction in losses:
-
-\[
-\Delta Y_t \approx N_t q p_t
-\]
-
-Thus:
-
-- Effect is negligible at low severity
-- Effect grows at high severity
-- No visible "miracle events"
-- Only statistical bias
-
----
-
-# 8. Statistical Structure
-
-The system becomes a **hierarchical stochastic model**:
-
-- Binomial variability (micro-level randomness)
-- Beta variability (parameter fluctuations)
+$$\Delta Y_t \approx N_t\, q\, p_t$$
 
 This produces:
 
-- Slight overdispersion
-- Subtle deviation from baseline expectation
-- No obvious anomalies per event
+- Slight overdispersion relative to a pure Binomial
+- A subtle, persistent negative bias in losses for the anomalous mission
+- No visible outlier events — only a statistical shift in the distribution
 
 ---
 
-# 9. Physical Interpretation
+## 6. Hierarchical Model Summary
 
-This can be viewed as:
+The system is a **two-level hierarchical stochastic model**:
 
-- A many-body system (decisions)
-- With a small perturbation in coupling (failure probability)
-
-The anomaly behaves like:
-
-> A weak perturbation that becomes visible only in large systems.
-
-Analogy:
-
-- Small change in interaction strength
-- Observable only in macroscopic aggregates
+| Level | Variable | Distribution |
+|---|---|---|
+| Macro | Environmental severity $S_t$ | AR(1) + seasonal |
+| Meso | Decision load $N_t$ | Linear function of $S_t$ |
+| Micro | Losses $Y_t$ | Binomial$(N_t, q_{\text{eff},t})$ |
+| Anomaly | Efficiency parameter $p_t$ | Beta$(\alpha, \beta)$ |
 
 ---
 
-# 10. Temporal Behavior
+## 7. Temporal Behavior
 
-The anomaly:
+The anomaly parameter $p_t$ is drawn independently each period — it does not track seasonal phase or periodic forcing. Its effect correlates with severity only indirectly, through $N_t$. This means:
 
-- Does not follow seasonal phase
-- Does not track periodic forcing
-- Only depends on instantaneous system size \( N_t \)
-
-Thus:
-
-- Correlation with severity is indirect
-- No explicit temporal signature
+- No explicit temporal signature in the anomaly
+- Correlation with severity is a consequence of model structure, not a built-in assumption
+- Standard seasonal decomposition will not isolate it
 
 ---
 
-# 11. Detectability
+## 8. Detectability
 
-Republic-level detection:
-
-- High tolerance
-- Weak statistical flags
-- Possibly ignored
-
-Imperial-level detection:
-
-- Cross-period aggregation
-- Residual analysis
-- Detection of sustained deviation
+| Analysis level | Expected behavior |
+|---|---|
+| Per-event inspection | Anomaly not visible |
+| Rolling variance windows | Weak flag |
+| Cross-mission percentile ranking | Persistent low-rank signal |
+| Aggregated residual analysis | Sustained deviation detectable |
 
 ---
 
-# 12. Removal Event
+## 9. Removal Event
 
-At time \( t = t^* \):
+At a defined time $t = t^*$, the anomalous influence is removed. After that point:
 
-- The influencing variable disappears
+- The mission reverts to baseline Binomial behavior
+- No structural change in the environment or decision load
+- The deviation disappears through statistical normalization
 
-After that:
-
-- System reverts to baseline
-- No structural change
-- Only statistical normalization
+This is a key testable feature of the model: the change point at $t^*$ should be detectable in retrospective analysis.
 
 ---
 
-# 13. Modeling Philosophy
+## 10. Implementation
 
-Constraints:
+Core pipeline:
 
-- No extreme outliers
-- No zero-loss miracles
-- No visible discontinuities
-
-Desired behavior:
-
-- Smooth statistical deviation
-- Subtle but persistent effect
-- Realistic variability
-
----
-
-# 14. Implementation Summary
-
-Core components in code:
-
-- AR(1) + seasonal forcing → severity
-- Linear mapping → decision count
-- Binomial sampling → losses
-- Beta modulation → anomaly
+```
+severity.py      → AR(1) + seasonal forcing → S_t
+decisions.py     → linear mapping          → N_t
+losses.py        → Binomial sampling        → Y_t (baseline)
+anomaly.py       → Beta modulation          → q_eff,t (anomalous mission)
+simulation.py    → multi-mission orchestrator
+generate_data.py → exports simulation.csv
+```
 
 ---
 
-# 15. Future Extensions
+## 11. Dynamic Model (In Development)
 
-- Nonlinear decision thresholds
-- Multiple interacting regions
-- Time-delay in response systems
-- Bayesian detection framework
-- Causal inference under hidden variables
+The static model treats each period as independent. The dynamic model introduces intra-event temporal structure:
+
+- Decision dynamics modeled as a driven spring-mass oscillator
+- Numerical integration via **Störmer-Verlet** scheme (symplectic, energy-conserving)
+- Asymmetric damping: different resistance to escalation vs. de-escalation
+- Anomaly enters as a perturbation to the damping coefficient
+
+This allows modeling of decision momentum and recovery dynamics within a single event.
 
 ---
 
-# End of Document
+## 12. Modeling Constraints
+
+The model is designed to avoid artifacts that would make detection trivially easy or trivially hard:
+
+- No extreme outliers or zero-loss events
+- No visible discontinuities at the anomaly boundary
+- Smooth statistical deviation with realistic variability
+- Signal-to-noise ratio calibrated to require genuine statistical effort to detect
+
+---
+
+## 13. Potential Extensions
+
+- Nonlinear decision thresholds and saturation effects
+- Multiple interacting mission regions with cross-contamination
+- Time-delay in environmental response systems
+- Bayesian change-point detection framework
+- Causal inference under hidden confounders

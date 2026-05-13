@@ -1,3 +1,36 @@
+# Virtual environment
 venv/
+.venv/
+env/
+
+# Python cache
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+
+# pytest cache
+.pytest_cache/
+
+# Package build artifacts
+*.egg-info/
+dist/
+build/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Data (optional — remove this block if you want simulation.csv tracked)
+# data/
+
+# Scratch / listing files
+estructura.txt
+estructura2.txt
+estructura3.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.swp
